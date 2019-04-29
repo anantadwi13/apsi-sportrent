@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title','Registrasi Penyedia Ruangan')
+@section('title','Lapangan')
 
 @section('action')
     <div class="float-sm-right">
@@ -36,7 +36,7 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('register.act') }}">
                         @csrf
-                        <input type="hidden" name="tipe_akun" value="{{\App\User::TYPE_PENYEDIA}}">
+                        <input type="hidden" name="tipe_akun" value="{{\App\User::TYPE_VENDOR}}">
 
                         <div class="form-group row">
                             <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>

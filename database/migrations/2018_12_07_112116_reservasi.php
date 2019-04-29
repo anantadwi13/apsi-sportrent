@@ -15,7 +15,7 @@ class Reservasi extends Migration
     {
         Schema::create('reservasi', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('id_ruangan');
+            $table->unsignedBigInteger('id_lapangan');
             $table->unsignedBigInteger('id_user');
             $table->string('nama_acara');
             $table->text('deskripsi_acara');
@@ -24,7 +24,7 @@ class Reservasi extends Migration
             $table->tinyInteger('status');
             $table->timestamps();
             $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_ruangan')->references('id')->on('ruangan');
+            $table->foreign('id_lapangan')->references('id')->on('lapangan');
         });
     }
 

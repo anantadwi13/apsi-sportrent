@@ -6,7 +6,7 @@ use App\Kategori;
 use App\Kecamatan;
 use App\KotaKab;
 use App\Provinsi;
-use App\Ruangan;
+use App\Lapangan;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,10 +26,10 @@ class RuanganController extends Controller
      */
     public function index()
     {
-        if (\Auth::check() && \Auth::user()->tipe_akun == User::TYPE_PENYEDIA)
-            $dataRuangan = Ruangan::whereIdUser(\Auth::user()->id)->get();
+        if (\Auth::check() && \Auth::user()->tipe_akun == User::TYPE_VENDOR)
+            $dataRuangan = Lapangan::whereIdUser(\Auth::user()->id)->get();
         else
-            $dataRuangan = Ruangan::all();
+            $dataRuangan = Lapangan::all();
 
         return view('ruangan.index')->with(compact('dataRuangan'));
     }
@@ -80,18 +80,18 @@ class RuanganController extends Controller
             'kecamatan.exists' => 'Kecamatan tidak sesuai!',
         ]);
 
-        $ruangan = new Ruangan();
+        $ruangan = new Lapangan();
         $ruangan->nama = $request->input('nama');
         $ruangan->kode = $request->input('kode');
         $ruangan->id_kategori = $request->input('kategori');
         $ruangan->id_user = \Auth::user()->id;
         $ruangan->alamat_jalan = $request->input('alamat');
         $ruangan->alamat_kecamatan = $request->input('kecamatan');
-        $ruangan->status = Ruangan::STATUS_AVAILABLE;
+        $ruangan->status = Lapangan::STATUS_AVAILABLE;
 
         try{
             if ($ruangan->save())
-                return redirect(route("ruangan.index"))->with('success','Ruangan berhasil dimasukkan!');
+                return redirect(route("ruangan.index"))->with('success','Lapangan berhasil dimasukkan!');
             return redirect()->back()->withErrors(['Gagal menyimpan!']);
         }
         catch (\Exception $exception){
@@ -102,13 +102,13 @@ class RuanganController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Ruangan  $ruangan
+     * @param  \App\Lapangan  $ruangan
      * @return \Illuminate\Http\Response
      */
-    public function show(Ruangan $ruangan)
+    public function show(Lapangan $ruangan)
     {
         if (empty($ruangan) || !$ruangan->exists)
-            return redirect()->back()->withErrors(['Ruangan tidak ditemukan!']);
+            return redirect()->back()->withErrors(['Lapangan tidak ditemukan!']);
 
         return view('ruangan.show')->with(compact('ruangan'));
     }
@@ -116,13 +116,13 @@ class RuanganController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Ruangan  $ruangan
+     * @param  \App\Lapangan  $ruangan
      * @return \Illuminate\Http\Response
      */
-    public function edit(Ruangan $ruangan)
+    public function edit(Lapangan $ruangan)
     {
         if (empty($ruangan) || !$ruangan->exists)
-            return redirect()->back()->withErrors(['Ruangan tidak ditemukan!']);
+            return redirect()->back()->withErrors(['Lapangan tidak ditemukan!']);
 
         if ($ruangan->user->id == \Auth::user()->id || \Auth::user()->tipe_akun == User::TYPE_ADMIN) {
             $kategori = Kategori::all();
@@ -142,14 +142,14 @@ class RuanganController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Ruangan $ruangan
+     * @param  \App\Lapangan $ruangan
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Ruangan $ruangan)
+    public function update(Request $request, Lapangan $ruangan)
     {
         if (empty($ruangan) || !$ruangan->exists)
-            return redirect()->back()->withErrors(['Ruangan tidak ditemukan!']);
+            return redirect()->back()->withErrors(['Lapangan tidak ditemukan!']);
 
         if ($ruangan->user->id == \Auth::user()->id || \Auth::user()->tipe_akun == User::TYPE_ADMIN) {
             $this->validate($request, [
@@ -185,7 +185,7 @@ class RuanganController extends Controller
 
             try {
                 if ($ruangan->save())
-                    return redirect(route("ruangan.index"))->with('success', 'Ruangan berhasil diupdate!');
+                    return redirect(route("ruangan.index"))->with('success', 'Lapangan berhasil diupdate!');
                 return redirect()->back()->withErrors(['Gagal menyimpan!']);
             } catch (\Exception $exception) {
                 return redirect()->back()->withErrors(['Gagal menyimpan!']);
@@ -197,13 +197,13 @@ class RuanganController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Ruangan  $ruangan
+     * @param  \App\Lapangan  $ruangan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ruangan $ruangan)
+    public function destroy(Lapangan $ruangan)
     {
         if (empty($ruangan) || !$ruangan->exists)
-            return redirect()->back()->withErrors(['Ruangan tidak ditemukan!']);
+            return redirect()->back()->withErrors(['Lapangan tidak ditemukan!']);
 
         if ($ruangan->user->id == \Auth::user()->id || \Auth::user()->tipe_akun == User::TYPE_ADMIN) {
             try{
@@ -212,7 +212,7 @@ class RuanganController extends Controller
                     $ruangan->reservasi()->delete();
                 if ($ruangan->delete()) {
                     DB::commit();
-                    return redirect(route('ruangan.index'))->with('success', 'Ruangan berhasil dihapus!');
+                    return redirect(route('ruangan.index'))->with('success', 'Lapangan berhasil dihapus!');
                 }
                 return redirect()->back()->withErrors(['Gagal menghapus!']);
             } catch (\Exception $exception){

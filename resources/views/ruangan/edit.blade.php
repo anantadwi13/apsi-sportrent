@@ -1,10 +1,10 @@
 @extends("layouts.dashboard")
 
 @php
-    /** @var \App\Ruangan $ruangan */
+    /** @var \App\Lapangan $ruangan */
 @endphp
 
-@section('title','Ruangan')
+@section('title','Lapangan')
 
 @section('content')
     <div class="row">
@@ -60,8 +60,8 @@
                         <div class="form-group">
                             <label for="statusRuangan">Status Ruangan</label>
                             <select class="form-control select2{{ $errors->has('status') ? ' is-invalid' : '' }}" name="status" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                <option value="1" @if($ruangan->status == \App\Ruangan::STATUS_AVAILABLE) selected @endif>Tersedia</option>
-                                <option value="0" @if($ruangan->status == \App\Ruangan::STATUS_MAINTENANCE) selected @endif>Perbaikan</option>
+                                <option value="1" @if($ruangan->status == \App\Lapangan::STATUS_AVAILABLE) selected @endif>Tersedia</option>
+                                <option value="0" @if($ruangan->status == \App\Lapangan::STATUS_MAINTENANCE) selected @endif>Perbaikan</option>
                             </select>
 
                             @if ($errors->has('status'))

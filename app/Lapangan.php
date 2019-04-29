@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ruangan extends Model
+class Lapangan extends Model
 {
-    protected $table = "ruangan";
+    protected $table = "lapangan";
 
     const STATUS_AVAILABLE = 1;
     const STATUS_MAINTENANCE = 0;

@@ -44,7 +44,7 @@
                             <tr>
                                 <td></td>
                                 <td>{{$item->nama}}</td>
-                                <td>{{$item->tipe_akun==\App\User::TYPE_ADMIN?"Administrator":($item->tipe_akun==\App\User::TYPE_PENYEDIA?"Penyedia Ruangan":"Peminjam")}}</td>
+                                <td>{{$item->tipe_akun==\App\User::TYPE_ADMIN?"Administrator":($item->tipe_akun==\App\User::TYPE_VENDOR?"Lapangan":"Peminjam")}}</td>
                                 <td>{{$item->status==\App\User::STATUS_ACTIVE?"Aktif":($item->status==\App\User::STATUS_NONACTIVE?"Non Aktif":"Dihapus/Banned")}}</td>
                                 <td>
                                     <a href="{{route('user.show', $item->username)}}" class="btn btn-primary">Detail</a>

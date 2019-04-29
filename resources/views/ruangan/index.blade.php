@@ -1,10 +1,10 @@
 @extends("layouts.dashboard")
 
 @php
-    /** @var \App\Ruangan[] $dataRuangan */
+    /** @var \App\Lapangan[] $dataRuangan */
 @endphp
 
-@section('title','Ruangan')
+@section('title','Lapangan')
 
 @section('content')
     <div class="row">
@@ -50,7 +50,7 @@
                                 <td>{{$item->status?"Tersedia":"Perbaikan"}}</td>
                                 <td>
                                     <a href="{{route('ruangan.show', $item)}}" class="btn btn-primary">Detail</a>
-                                    @if(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_PEMINJAM && $item->status == \App\Ruangan::STATUS_AVAILABLE)
+                                    @if(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_PEMINJAM && $item->status == \App\Lapangan::STATUS_AVAILABLE)
                                         <a href="{{route('reservasi.create',['ruangan' => $item->id])}}" class="btn btn-success">Reservasi</a>
                                     @endif
                                     @if(Auth::check() && Auth::user()->tipe_akun > \App\User::TYPE_PEMINJAM)

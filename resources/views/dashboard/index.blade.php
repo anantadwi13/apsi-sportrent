@@ -24,13 +24,13 @@
             <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
-                    @if(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_PENYEDIA)
-                        <h3>{{\App\Ruangan::whereIdUser(Auth::user()->id)->count()}}</h3>
+                    @if(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_VENDOR)
+                        <h3>{{\App\Lapangan::whereIdUser(Auth::user()->id)->count()}}</h3>
                     @else
-                        <h3>{{\App\Ruangan::count()}}</h3>
+                        <h3>{{\App\Lapangan::count()}}</h3>
                     @endif
 
-                    <p>Ruangan</p>
+                    <p>Lapangan</p>
                 </div>
                 <div class="icon">
                     <i class="far fa-building"></i>
@@ -44,11 +44,11 @@
             <!-- small box -->
             <div class="small-box bg-success">
                 <div class="inner">
-                    @if(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_PENYEDIA)
+                    @if(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_VENDOR)
                         @php
                             $totalReservasi = 0;
-                            foreach (\App\Ruangan::whereIdUser(Auth::user()->id)->get() as $ruangan)
-                                foreach ($ruangan->reservasi as $reservasi)
+                            foreach (\App\Lapangan::whereIdUser(Auth::user()->id)->get() as $lapangan)
+                                foreach ($lapangan->reservasi as $reservasi)
                                     $totalReservasi++;
                         @endphp
                         <h3>{{$totalReservasi}}</h3>
@@ -67,7 +67,7 @@
             </div>
         </div>
         @endif
-        @if(!(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_PENYEDIA))
+        @if(!(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_VENDOR))
         <!-- ./col -->
         <div class="col-lg-3 col-6">
             <!-- small box -->

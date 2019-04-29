@@ -10,7 +10,8 @@ class User extends Authenticatable
 {
     use Notifiable;
     const TYPE_PEMINJAM = 1;
-    const TYPE_PENYEDIA = 2;
+    const TYPE_VENDOR = 2;
+    const TYPE_CS = 90;
     const TYPE_ADMIN = 99;
 
     const STATUS_ACTIVE = 2;
@@ -23,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nama', 'username', 'email', 'no_identitas','tipe_akun','nohp','alamat_jalan','alamat_kecamatan','password','status',
+        'nama', 'username', 'email', 'tipe_akun','nohp','password','status',
     ];
 
     /**
@@ -36,7 +37,7 @@ class User extends Authenticatable
     ];
 
     public function ruangan(){
-        return $this->hasMany('App\Ruangan', 'id_user', 'id');
+        return $this->hasMany('App\Lapangan', 'id_user', 'id');
     }
 
     public function reservasi(){
@@ -51,7 +52,19 @@ class User extends Authenticatable
         return $this->hasMany('App\Report', 'id_dilapor', 'id');
     }
 
-    public function kecamatan(){
-        return $this->belongsTo('App\Kecamatan', 'alamat_kecamatan','id');
+    public function data_admin(){
+        return $this->hasOne('App\Admin', 'id_user', 'id');
+    }
+
+    public function data_vendor(){
+        return $this->hasOne('App\Vendor', 'id_user', 'id');
+    }
+
+    public function data_peminjam(){
+        return $this->hasOne('App\Peminjam', 'id_user', 'id');
+    }
+
+    public function data_customer_service(){
+        return $this->hasOne('App\CustomerService', 'id_user', 'id');
     }
 }

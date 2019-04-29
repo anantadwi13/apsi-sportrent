@@ -77,7 +77,7 @@ class UserController extends Controller
 
         if (empty($user) || !$user->exists)
             return redirect()->back()->withErrors(['User tidak ditemukan!']);
-        if ($user->tipe_akun == User::TYPE_PEMINJAM && (\Auth::guest() || !(\Auth::user()->tipe_akun == User::TYPE_PENYEDIA || \Auth::user()->tipe_akun == User::TYPE_ADMIN || \Auth::user()->id == $user->id)))
+        if ($user->tipe_akun == User::TYPE_PEMINJAM && (\Auth::guest() || !(\Auth::user()->tipe_akun == User::TYPE_VENDOR || \Auth::user()->tipe_akun == User::TYPE_ADMIN || \Auth::user()->id == $user->id)))
             return redirect()->back()->withErrors(['Unauthorized page!']);
         if ($user->tipe_akun==User::TYPE_ADMIN && (\Auth::guest() || \Auth::user()->tipe_akun != User::TYPE_ADMIN))
             return redirect()->back()->withErrors(['Unauthorized page!']);
@@ -142,7 +142,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->validate($request, [
-            'tipe_akun' => ['bail','required',Rule::in([User::TYPE_PEMINJAM,User::TYPE_PENYEDIA,User::TYPE_ADMIN])],
+            'tipe_akun' => ['bail','required',Rule::in([User::TYPE_PEMINJAM,User::TYPE_VENDOR,User::TYPE_ADMIN])],
             'status' => ['bail','required', Rule::in([User::STATUS_BANNED,User::STATUS_NONACTIVE,User::STATUS_ACTIVE])],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id.',id'],

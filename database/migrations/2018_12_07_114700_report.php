@@ -33,6 +33,6 @@ class Report extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('report');
     }
 }

@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        @if($user->tipe_akun == \App\User::TYPE_PENYEDIA)
+        @if($user->tipe_akun == \App\User::TYPE_VENDOR)
         <div class="col-lg-12 col-12">
             <div class="card card-dark">
                 <div class="card-header">
@@ -72,10 +72,10 @@
                                 <td>{{$item->status?"Tersedia":"Perbaikan"}}</td>
                                 <td>
                                     <a href="{{route('ruangan.show', $item)}}" class="btn btn-primary">Detail</a>
-                                    @if(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_PEMINJAM && $item->status == \App\Ruangan::STATUS_AVAILABLE)
+                                    @if(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_PEMINJAM && $item->status == \App\Lapangan::STATUS_AVAILABLE)
                                         <a href="{{route('reservasi.create',['ruangan' => $item->id])}}" class="btn btn-success">Reservasi</a>
                                     @endif
-                                    @if(Auth::check() && ((Auth::user()->tipe_akun == \App\User::TYPE_PENYEDIA && $user->id == Auth::user()->id) || Auth::user()->tipe_akun == \App\User::TYPE_ADMIN))
+                                    @if(Auth::check() && ((Auth::user()->tipe_akun == \App\User::TYPE_VENDOR && $user->id == Auth::user()->id) || Auth::user()->tipe_akun == \App\User::TYPE_ADMIN))
                                         <a href="{{route('ruangan.edit', $item)}}" class="btn btn-warning">Edit</a>
                                         <form method="post" class="delete" action="{{route('ruangan.destroy', $item)}}" style="display: inline-block;">
                                             {{csrf_field()}}
@@ -104,7 +104,7 @@
                             <th>No</th>
                             <th>Ruangan</th>
                             <th>Nama Acara</th>
-                            @if(Auth::check() && Auth::user()->tipe_akun >= \App\User::TYPE_PENYEDIA)
+                            @if(Auth::check() && Auth::user()->tipe_akun >= \App\User::TYPE_VENDOR)
                                 <th>Peminjam</th>
                             @elseif(Auth::check() && Auth::user()->tipe_akun >= \App\User::TYPE_PEMINJAM)
                                 <th>Pemilik Ruangan</th>
@@ -119,7 +119,7 @@
                                 <td></td>
                                 <td>{{$item->ruangan->nama}}</td>
                                 <td>{{$item->nama_acara}}</td>
-                                @if(Auth::check() && Auth::user()->tipe_akun >= \App\User::TYPE_PENYEDIA)
+                                @if(Auth::check() && Auth::user()->tipe_akun >= \App\User::TYPE_VENDOR)
                                     <td>{{$item->user->nama}}</td>
                                 @elseif(Auth::check() && Auth::user()->tipe_akun >= \App\User::TYPE_PEMINJAM)
                                     <td>{{$item->ruangan->user->nama}}</td>
@@ -127,7 +127,7 @@
                                 <td>{{$item->status==\App\Reservasi::STATUS_ACCEPTED?"Diterima":($item->status==\App\Reservasi::STATUS_REJECTED?"Ditolak":"Menunggu")}}</td>
                                 <td>
                                     <a href="{{route('reservasi.show', $item)}}" class="btn btn-primary">Detail</a>
-                                    @if(Auth::check() && ((Auth::user()->tipe_akun == \App\User::TYPE_PENYEDIA && $item->ruangan->user->id == Auth::user()->id) || Auth::user()->tipe_akun == \App\User::TYPE_ADMIN))
+                                    @if(Auth::check() && ((Auth::user()->tipe_akun == \App\User::TYPE_VENDOR && $item->ruangan->user->id == Auth::user()->id) || Auth::user()->tipe_akun == \App\User::TYPE_ADMIN))
                                         <a href="{{route('reservasi.edit', $item)}}" class="btn btn-warning">Edit</a>
                                         @if($item->status == \App\Reservasi::STATUS_WAITING)
                                             <form method="post" action="{{route('reservasi.action', $item)}}" style="display: inline-block;">

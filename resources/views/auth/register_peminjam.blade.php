@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title','Registrasi Peminjam Ruangan')
+@section('title','Register Peminjam')
 
 @section('action')
     <div class="float-sm-right">
@@ -65,19 +65,6 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="no_identitas" class="col-md-4 col-form-label text-md-right">No Identitas</label>
-                                <div class="col-md-6">
-                                    <input id="no_identitas" type="text" class="form-control{{ $errors->has('no_identitas') ? ' is-invalid' : '' }}" name="no_identitas" value="{{ old('no_identitas') }}" required>
-
-                                    @if ($errors->has('no_identitas'))
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('no_identitas') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
 
                                 <div class="col-md-6">
@@ -105,65 +92,33 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="alamat" class="col-md-4 col-form-label text-md-right">Alamat</label>
-                                <div class="col-md-6">
-                                    <input id="alamat" type="text" class="form-control{{ $errors->has('alamat') ? ' is-invalid' : '' }}" name="alamat" value="{{ old('alamat') }}" required>
+                                <label for="deskripsi" class="col-md-4 col-form-label text-md-right">Tanggal Lahir</label>
 
-                                    @if ($errors->has('alamat'))
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('alamat') }}</strong>
-                                    </span>
-                                    @endif
+                                <div class="col-md-6">
+                                    <input type="text" autocomplete="off" class="form-control float-right datetimepicker datetimepicker-input" name="tgl_lahir" id="time_start" data-toggle="datetimepicker" data-target="#time_start">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="provinsi" class="col-md-4 col-form-label text-md-right">Provinsi</label>
-                                <div class="col-md-6">
-                                    <select id="provinsi" class="form-control select2{{ $errors->has('provinsi') ? ' is-invalid' : '' }}" name="provinsi">
-                                        <option value="" disabled selected>-</option>
-                                        @foreach($provinsi as $item)
-                                            <option value="{{$item->id}}" @if(old('provinsi')==$item->id) selected @endif>{{$item->nama}}</option>
-                                        @endforeach
-                                    </select>
+                                <label for="tempat_lahir" class="col-md-4 col-form-label text-md-right">Tempat Lahir</label>
 
-                                    @if ($errors->has('provinsi'))
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('provinsi') }}</strong>
-                                    </span>
-                                    @endif
+                                <div class="col-md-6">
+                                    <input id="tempat_lahir" type="text" class="form-control" name="tempat_lahir" required>
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label for="kota" class="col-md-4 col-form-label text-md-right">Kota/Kabupaten</label>
+                                <label for="jenis_kel" class="col-md-4 col-form-label text-md-right">Jenis Kelamin</label>
                                 <div class="col-md-6">
-                                    <select id="kota" class="form-control select2{{ $errors->has('kota') ? ' is-invalid' : '' }}" name="kota">
-                                        <option value="" disabled selected>-</option>
-                                        @foreach($kota as $item)
-                                            <option value="{{$item->id}}" @if(old('kota')==$item->id) selected @endif>{{$item->nama}}</option>
-                                        @endforeach
+                                    <select id="jenis_kel" class="form-control select2" name="jenis_kel">
+                                        <option value="-1" disabled selected>-</option>
+                                        <option value="0">Perempuan</option>
+                                        <option value="1">Laki-laki</option>
                                     </select>
 
-                                    @if ($errors->has('kota'))
+                                    @if ($errors->has('jenis_kel'))
                                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('kota') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="kecamatan" class="col-md-4 col-form-label text-md-right">Kecamatan</label>
-                                <div class="col-md-6">
-                                    <select id="kecamatan" class="form-control select2{{ $errors->has('kecamatan') ? ' is-invalid' : '' }}" name="kecamatan">
-                                        <option value="" disabled selected>-</option>
-                                        @foreach($kecamatan as $item)
-                                            <option value="{{$item->id}}" @if(old('kecamatan')==$item->id) selected @endif>{{$item->nama}}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @if ($errors->has('kecamatan'))
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('kecamatan') }}</strong>
+                                        <strong>{{ $errors->first('jenis_kel') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -208,10 +163,14 @@
 
 @section('css')
     <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/tempusdominus-bootstrap-4.min.css')}}" />
 @endsection
 
 @section('js')
     <script src="{{asset('js/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/moment-with-locales.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/tempusdominus-bootstrap-4.min.js')}}"></script>
 
     <script>
         var p = $('#provinsi');
@@ -259,6 +218,13 @@
 
         $(document).ready(function() {
             $('.select2').select2();
+            $('.datetimepicker').datetimepicker({
+                locale: 'id',
+                format: 'YYYY-MM-DD',
+                icons:{
+                    date: 'far fa-calendar',
+                }
+            });
         });
 
         $('form').submit(function()

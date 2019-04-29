@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reservasi;
-use App\Ruangan;
+use App\Lapangan;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -25,9 +25,9 @@ class ReservasiController extends Controller
     {
         if (\Auth::user()->tipe_akun == User::TYPE_ADMIN)
             $dataReservasi = Reservasi::all();
-        else if (\Auth::user()->tipe_akun == User::TYPE_PENYEDIA) {
+        else if (\Auth::user()->tipe_akun == User::TYPE_VENDOR) {
             $dataReservasi = [];
-            foreach (Ruangan::whereIdUser(\Auth::user()->id)->get() as $item)
+            foreach (Lapangan::whereIdUser(\Auth::user()->id)->get() as $item)
                 foreach ($item->reservasi as $itemreservasi)
                     $dataReservasi[] = $itemreservasi;
         }
@@ -45,7 +45,7 @@ class ReservasiController extends Controller
     {
         $id_ruangan = $request->get('ruangan');
 
-        $ruangan = Ruangan::whereStatus(Ruangan::STATUS_AVAILABLE)->get();
+        $ruangan = Lapangan::whereStatus(Lapangan::STATUS_AVAILABLE)->get();
         return view('reservasi.create')->with(compact('ruangan','id_ruangan'));
     }
 
@@ -58,7 +58,7 @@ class ReservasiController extends Controller
             $reservasi->status = Reservasi::STATUS_REJECTED;
 
         if ($reservasi->status == Reservasi::STATUS_ACCEPTED && Reservasi::where('id','<>',$reservasi->id)->whereIdRuangan($reservasi->id_ruangan)->whereStatus(Reservasi::STATUS_ACCEPTED)->where(function($query) use ($reservasi) {$query->whereBetween('time_start',[$reservasi->time_start,$reservasi->time_end])->orWhereBetween('time_end',[$reservasi->time_start,$reservasi->time_end]);})->count()>0)
-            return redirect()->back()->withErrors(['Ruangan pada jam tersebut telah dipinjam']);
+            return redirect()->back()->withErrors(['Lapangan pada jam tersebut telah dipinjam']);
 
         try{
             if($reservasi->save())
@@ -87,8 +87,8 @@ class ReservasiController extends Controller
             'time_start' => 'required|date',
             'time_stop' => 'required|date|after:time_start',
         ],[
-            'ruangan.required' => 'Ruangan harus diisi!',
-            'ruangan.exists' => 'Ruangan tidak valid!',
+            'ruangan.required' => 'Lapangan harus diisi!',
+            'ruangan.exists' => 'Lapangan tidak valid!',
             'nama.required' => 'Nama harus diisi!',
             'time_start.required' => 'Waktu acara mulai harus diisi!',
             'time_start.date' => 'Waktu acara mulai tidak valid!',
@@ -96,8 +96,8 @@ class ReservasiController extends Controller
             'time_stop.date' => 'Waktu acara selesai tidak valid!',
             'time_stop.after' => 'Waktu acara tidak valid!',
         ]);
-        if (Ruangan::find($request->input('ruangan'))->status != Ruangan::STATUS_AVAILABLE)
-            return redirect()->back()->withErrors(['Gagal membuat reservasi! Ruangan sedang dalam perbaikan!']);
+        if (Lapangan::find($request->input('ruangan'))->status != Lapangan::STATUS_AVAILABLE)
+            return redirect()->back()->withErrors(['Gagal membuat reservasi! Lapangan sedang dalam perbaikan!']);
 
         $reservasi = new Reservasi();
         $reservasi->id_ruangan = $request->input('ruangan');
@@ -138,7 +138,7 @@ class ReservasiController extends Controller
     public function edit(Reservasi $reservasi)
     {
         if ($reservasi->ruangan->user->id == \Auth::user()->id || \Auth::user()->tipe_akun == User::TYPE_ADMIN){
-            $ruangan = Ruangan::all();
+            $ruangan = Lapangan::all();
 
             return view('reservasi.edit')->with(compact('reservasi','ruangan'));
         }
@@ -165,8 +165,8 @@ class ReservasiController extends Controller
                 'time_start' => 'required|date',
                 'time_stop' => 'required|date|after:time_start',
             ], [
-                'ruangan.required' => 'Ruangan harus diisi!',
-                'ruangan.exists' => 'Ruangan tidak valid!',
+                'ruangan.required' => 'Lapangan harus diisi!',
+                'ruangan.exists' => 'Lapangan tidak valid!',
                 'nama.required' => 'Nama harus diisi!',
                 'status.required' => 'Status harus diisi!',
                 'status.numeric' => 'Status tidak valid!',
@@ -189,7 +189,7 @@ class ReservasiController extends Controller
             if ($reservasi->status == Reservasi::STATUS_ACCEPTED && Reservasi::where('id', '<>', $reservasi->id)->whereIdRuangan($reservasi->id_ruangan)->whereStatus(Reservasi::STATUS_ACCEPTED)->where(function ($query) use ($reservasi) {
                     $query->whereBetween('time_start', [$reservasi->time_start, $reservasi->time_end])->orWhereBetween('time_end', [$reservasi->time_start, $reservasi->time_end]);
                 })->count() > 0)
-                return redirect()->back()->withErrors(['Ruangan pada jam tersebut telah dipinjam']);
+                return redirect()->back()->withErrors(['Lapangan pada jam tersebut telah dipinjam']);
 
             try {
                 if ($reservasi->save())

@@ -1,10 +1,10 @@
 @extends("layouts.dashboard")
 
 @php
-    /** @var \App\Ruangan $ruangan */
+    /** @var \App\Lapangan $ruangan */
 @endphp
 
-@section('title','Ruangan')
+@section('title','Lapangan')
 
 @section('content')
     <div class="row">
@@ -37,7 +37,7 @@
                     @endif
                     <div class="form-group">
                         <label>Status</label>
-                        <div>{{$ruangan->status==\App\Ruangan::STATUS_AVAILABLE?"Tersedia":"Maintenance"}}</div>
+                        <div>{{$ruangan->status==\App\Lapangan::STATUS_AVAILABLE?"Tersedia":"Maintenance"}}</div>
                     </div>
                 </div>
             </div>

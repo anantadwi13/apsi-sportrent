@@ -174,7 +174,7 @@
                             <div class="col-md-6">
                                 <select id="tipe_akun" class="form-control select2{{ $errors->has('tipe_akun') ? ' is-invalid' : '' }}" name="tipe_akun">
                                     <option value="{{\App\User::TYPE_PEMINJAM}}" @if($user->tipe_akun==\App\User::TYPE_PEMINJAM) selected @endif>Peminjam</option>
-                                    <option value="{{\App\User::TYPE_PENYEDIA}}" @if($user->tipe_akun==\App\User::TYPE_PENYEDIA) selected @endif>Penyedia Ruangan</option>
+                                    <option value="{{\App\User::TYPE_VENDOR}}" @if($user->tipe_akun==\App\User::TYPE_VENDOR) selected @endif>Penyedia Ruangan</option>
                                     <option value="{{\App\User::TYPE_ADMIN}}" @if($user->tipe_akun==\App\User::TYPE_ADMIN) selected @endif>Admin</option>
                                 </select>
 

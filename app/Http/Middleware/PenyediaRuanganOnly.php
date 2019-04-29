@@ -16,7 +16,7 @@ class PenyediaRuanganOnly
      */
     public function handle($request, Closure $next)
     {
-        if (\Auth::check() && (\Auth::user()->tipe_akun == User::TYPE_PENYEDIA || \Auth::user()->tipe_akun == User::TYPE_ADMIN)) {
+        if (\Auth::check() && (\Auth::user()->tipe_akun == User::TYPE_VENDOR || \Auth::user()->tipe_akun == User::TYPE_ADMIN)) {
             if (\Auth::user()->status != User::STATUS_ACTIVE) {
                 \Auth::logout();
                 return redirect(route('dashboard.index'))->withErrors(['User tidak aktif!']);

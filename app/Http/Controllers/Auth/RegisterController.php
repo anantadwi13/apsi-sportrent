@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Kecamatan;
 use App\KotaKab;
+use App\Peminjam;
 use App\Provinsi;
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Vendor;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -94,12 +97,18 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'username' => ['required', 'string', 'min:4', 'max:255', 'unique:users,username'],
-            'no_identitas' => ['required_if:tipe_akun,'.User::TYPE_PEMINJAM, 'string', 'min:16', 'max:16'],
+            'tgl_lahir' => ['required_if:tipe_akun,'.User::TYPE_PEMINJAM, 'date'],
+            'tempat_lahir' => ['required_if:tipe_akun,'.User::TYPE_PEMINJAM, 'string'],
+            'jenis_kel' => ['required_if:tipe_akun,'.User::TYPE_PEMINJAM, 'boolean'],
             'no_hp' => ['required', 'numeric', 'digits_between:10,16'],
-            'alamat' => ['required', 'string', 'min:4', 'max:255'],
-            'provinsi' => ['required', 'exists:provinsi,id'],
-            'kota' => ['required', 'exists:kota_kab,id'],
-            'kecamatan' => ['required', 'exists:kecamatan,id'],
+            'nama_pemilik' => ['required_if:tipe_akun,'.User::TYPE_VENDOR, 'string', 'max:255'],
+            'no_hp_pemilik' => ['required_if:tipe_akun,'.User::TYPE_VENDOR, 'digits_between:10,15'],
+            'npwp_pemilik' => ['required_if:tipe_akun,'.User::TYPE_VENDOR, 'digits_between:12,20'],
+            'ktp_pemilik' => ['required_if:tipe_akun,'.User::TYPE_VENDOR, 'digits:16'],
+            'alamat' => ['required_if:tipe_akun,'.User::TYPE_VENDOR,  'string', 'min:4', 'max:255'],
+            'provinsi' => ['required_if:tipe_akun,'.User::TYPE_VENDOR,  'exists:provinsi,id'],
+            'kota' => ['required_if:tipe_akun,'.User::TYPE_VENDOR, 'exists:kota_kab,id'],
+            'kecamatan' => ['required_if:tipe_akun,'.User::TYPE_VENDOR, 'exists:kecamatan,id'],
         ]);
     }
 
@@ -112,24 +121,50 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $status = User::STATUS_NONACTIVE;
-        if ($data['tipe_akun']!= User::TYPE_PENYEDIA) {
+        if ($data['tipe_akun']!= User::TYPE_VENDOR) {
             $status = User::STATUS_ACTIVE;
             $data['tipe_akun'] = User::TYPE_PEMINJAM;
         }
         else
             $data['no_identitas'] = null;
 
-        return User::create([
-            'nama' => $data['name'],
-            'email' => $data['email'],
-            'username' => $data['username'],
-            'no_identitas' => $data['no_identitas'],
-            'tipe_akun' => $data['tipe_akun'],
-            'nohp' => $data['no_hp'],
-            'alamat_jalan' => $data['alamat'],
-            'alamat_kecamatan' => $data['kecamatan'],
-            'status' => $status,
-            'password' => Hash::make($data['password']),
-        ]);
+        try {
+            DB::beginTransaction();
+            $user = User::create([
+                'nama' => $data['name'],
+                'email' => $data['email'],
+                'username' => $data['username'],
+                'tipe_akun' => $data['tipe_akun'],
+                'nohp' => $data['no_hp'],
+                'status' => $status,
+                'password' => Hash::make($data['password']),
+            ]);
+            switch ($user->tipe_akun){
+                case User::TYPE_PEMINJAM:
+                    Peminjam::create([
+                        'id_user' => $user->id,
+                        'tgl_lahir' => $data['tgl_lahir'],
+                        'tempat_lahir' => $data['tempat_lahir'],
+                        'jenis_kel' => $data['jenis_kel']
+                    ]);
+                    break;
+                case User::TYPE_VENDOR:
+                    Vendor::create([
+                        'id_user' => $user->id,
+                        'nama_pemilik' => $data['nama_pemilik'],
+                        'no_hp_pemilik' => $data['no_hp_pemilik'],
+                        'npwp_pemilik' => $data['npwp_pemilik'],
+                        'ktp_pemilik' => $data['ktp_pemilik'],
+                        'alamat_jalan' => $data['alamat'],
+                        'alamat_kecamatan' => $data['kecamatan'],
+                    ]);
+                    break;
+            }
+            DB::commit();
+            return $user;
+        }
+        catch (\Exception $e){
+            return null;
+        }
     }
 }

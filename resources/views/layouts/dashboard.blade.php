@@ -81,7 +81,7 @@
                     <li class="nav-item">
                         <a href="{{route('ruangan.index')}}" class="nav-link">
                             <i class="nav-icon far fa-building"></i>
-                            <p>Ruangan</p>
+                            <p>Lapangan</p>
                         </a>
                     </li>
                     @if(Auth::check())
@@ -92,7 +92,7 @@
                         </a>
                     </li>
                     @endif
-                    @if(!(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_PENYEDIA))
+                    @if(!(Auth::check() && Auth::user()->tipe_akun == \App\User::TYPE_VENDOR))
                     <li class="nav-item">
                         <a href="{{route('kategori.index')}}" class="nav-link">
                             <i class="nav-icon fa fa-star"></i>

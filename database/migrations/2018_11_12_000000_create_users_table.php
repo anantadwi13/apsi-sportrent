@@ -18,16 +18,12 @@ class CreateUsersTable extends Migration
             $table->string('nama');
             $table->string('username',50)->unique();
             $table->string('email',100)->unique();
-            $table->string('no_identitas',50)->nullable();
             $table->tinyInteger('tipe_akun');
             $table->string('nohp',15);
-            $table->string('alamat_jalan');
-            $table->unsignedInteger('alamat_kecamatan');
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedTinyInteger('status');
             $table->rememberToken();
             $table->timestamps();
-            $table->foreign('alamat_kecamatan')->references('id')->on('kecamatan');
         });
     }
 

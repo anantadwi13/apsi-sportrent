@@ -12,8 +12,8 @@ class Reservasi extends Model
     const STATUS_REJECTED = 1;
     const STATUS_ACCEPTED = 2;
 
-    public function ruangan(){
-        return $this->belongsTo('App\Ruangan', 'id_ruangan','id');
+    public function lapangan(){
+        return $this->belongsTo('App\Lapangan', 'id_lapangan','id');
     }
 
     public function user(){
